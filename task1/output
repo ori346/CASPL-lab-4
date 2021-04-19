@@ -1,9 +1,75 @@
-hi my name is ori
-wlcome to beer sheeba
-eof
+  
+  
+  int main (int argc , char* argv[], char* envp[])
+
+{
 
 
 
+   int fd=0;
+
+  
+
+   int nread;
+
+   char * nread_str;
+
+   char buf[BUF_SIZE];
+
+   struct linux_dirent *d;
+
+           int bpos;
+
+           char d_type;
+
+ 
+
+  fd=system_call(SYS_OPEN,".", 0 , 0);
+
+  for ( ; ; ) {
+
+               nread = system_call(SYS_GETDENTS, fd, buf, BUF_SIZE);
+
+               if (nread == -1)
+
+                   
+
+        system_call(SYS_WRITE,STDOUT, "error-getdents",BUF_SIZE);
+
+               if (nread == 0)
+
+                   break;
+
+       
+
+          system_call(SYS_WRITE,STDOUT, "--------------- nread=%d ---------------\n",100);
+
+      nread_str=itoa(nread);      
+
+          system_call(SYS_WRITE,STDOUT, nread_str,100);
+
+          
+
+          system_call(SYS_WRITE,STDOUT, "i-node#  file type  d_reclen  d_off   d_name\n",100);
+
+               for (bpos = 0; bpos < nread;) {
+
+                   d = (struct linux_dirent *) (buf + bpos);
+
+                  /* printf("%8ld  ", d->d_ino);**/
+
+                   d_type = *(buf + bpos + d->d_reclen - 1);
+
+             bpos += d->d_reclen;
+
+               }
+
+           }
+
+}
+  return 0;
+
+}
 
 
 

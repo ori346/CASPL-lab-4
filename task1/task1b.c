@@ -1,5 +1,7 @@
 #include "util.h"
 
+
+#define exit 1 
 #define SYS_READ 3
 #define SYS_WRITE 4
 #define STDIN 0
@@ -10,6 +12,7 @@
 #define SYS_ISEEK 19
 #define read 0
 #define write 1
+#define createIfDontExist 64
 #define read_and_write 2
 #define eof -1
 
@@ -76,20 +79,19 @@ int main (int argc , char* argv[], char* envp[])
     }
     else if(!strncmp(argv[i],"-i" ,2)){
       input = system_call(SYS_OPEN,argv[i]+2,read);
-      if (output == -1)
+      if (input < 0)
       {
-        return 0x55;
+        system_call(exit , 0x55);
       }
     }else if(!strncmp(argv[i],"-o" ,2)){
-      output = system_call(SYS_OPEN,argv[i]+2,write);
-      if (output == -1)
+      output = system_call(SYS_OPEN,argv[i]+2, createIfDontExist| write , 0777);
+      if (output < 0)
       {
-        return 0x55;
+        system_call(exit , 0x55);
       }
       
     }else {
-      system_call(SYS_WRITE,STDOUT,"Hello, World!\n", 14);
-      return 0x55;
+      system_call(exit , 0x55);
     }
   }
   return encoder(input ,output , dmode);
